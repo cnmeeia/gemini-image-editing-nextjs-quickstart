@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Download, RotateCcw, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { HistoryItem, HistoryPart } from "@/lib/types";
+import Image from "next/image"; // 导入 Next.js 的 Image 组件
 
 interface ImageResultDisplayProps {
   imageUrl: string;
@@ -21,7 +22,7 @@ export function ImageResultDisplay({
   const [showHistory, setShowHistory] = useState(false);
 
   const handleDownload = () => {
-    // Create a temporary link element
+    // 创建一个临时链接元素
     const link = document.createElement("a");
     link.href = imageUrl;
     link.download = `gemini-image-${Date.now()}.png`;
@@ -57,10 +58,12 @@ export function ImageResultDisplay({
       </div>
 
       <div className="rounded-lg overflow-hidden bg-muted p-2">
-        <img
+        <Image
           src={imageUrl}
           alt="Generated"
           className="max-w-[640px] h-auto mx-auto"
+          width={640} // 设置宽度
+          height={360} // 设置高度，您可以根据需要调整
         />
       </div>
 
@@ -90,10 +93,12 @@ export function ImageResultDisplay({
                       {part.text && <p className="text-sm">{part.text}</p>}
                       {part.image && (
                         <div className="mt-2 overflow-hidden rounded-md">
-                          <img
+                          <Image
                             src={part.image}
                             alt={`${item.role} image`}
                             className="max-w-64 h-auto object-contain"
+                            width={256} // 设置宽度
+                            height={256} // 设置高度
                           />
                         </div>
                       )}
@@ -101,10 +106,11 @@ export function ImageResultDisplay({
                   ))}
                 </div>
               </div>
+           
             ))}
           </div>
-        </div>
-      )}
+        </div>            
+        )}
     </div>
   );
 }
