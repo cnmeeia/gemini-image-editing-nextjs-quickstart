@@ -21,6 +21,7 @@ RUN \
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./ #明確複製鎖定檔案
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -30,7 +31,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED=${NEXT_TELEMETRY_DISABLED:-0}
 # RUN if [ "$NEXT_TELEMETRY_DISABLED" = "1" ]; then echo "Telemetry disabled"; else echo "Telemetry enabled"; fi
 
-RUN \
+RUN ls -l && \ #偵錯指令
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
